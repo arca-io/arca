@@ -11,7 +11,8 @@
     "ISSUER": "arca",
     "KEY_ID": "arca-ed25519-2026-11-09",
     "ANCHOR_CONTRACT": "",
-    "ANCHOR_NETWORK": "eip155:8453"
+    "ANCHOR_NETWORK": "eip155:8453",
+    "ANCHORER_ADDRESS": "0x08A22c6899a8b2eccA4b2B752a89eD498d7b2100"
   },
   "d1_databases": [
     {
