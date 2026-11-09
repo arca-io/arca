@@ -1,0 +1,25 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "arca-recorder",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-11-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": {
+    "enabled": true
+  },
+  "vars": {
+    // Issuer identity published alongside receipts.
+    "ISSUER": "arca",
+    "KEY_ID": "arca-ed25519-2026-11-09",
+    // Base L2 anchor contract address (deploy in Phase 3; placeholder for now).
+    "ANCHOR_CONTRACT": "",
+    "ANCHOR_NETWORK": "eip155:8453"
+  }
+  // Secrets added via `wrangler secret put`:
+  //   RECORDER_PRIVATE_KEY — Ed25519 signing key for Arca's recorder signature
+  //   ANCHORER_PRIVATE_KEY — EOA that signs anchor() txs on Base
+  // Bindings added as the project materializes:
+  //   D1 database `arca-events`
+  //   R2 bucket for optional payload refs
+  //   Analytics Engine dataset for ops metrics
+}
