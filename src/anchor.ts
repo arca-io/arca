@@ -7,9 +7,19 @@
 //   bytes 4..11  : uint64 BE epoch_id
 //   bytes 12..43 : 32-byte Merkle root
 
-import { createWalletClient, createPublicClient, http, type Hex } from "viem";
+import { createWalletClient, createPublicClient, http, fallback, type Hex } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { base } from "viem/chains";
+
+// Multiple public RPCs with failover. mainnet.base.org rate-limits Cloudflare
+// Worker egress IPs; llamarpc + publicnode are less aggressive. Order matters:
+// viem tries them in order and falls back on error.
+const BASE_RPCS = [
+  "https://base.llamarpc.com",
+  "https://base.publicnode.com",
+  "https://base-rpc.publicnode.com",
+  "https://mainnet.base.org",
+];
 
 export const ANCHOR_MAGIC = "0x41524341"; // "ARCA"
 
@@ -47,15 +57,13 @@ export async function anchorRoot(
   const account = privateKeyToAccount(privateKeyHex as Hex);
   const data = encodeCalldata(epochId, rootHex);
 
+  const transport = fallback(BASE_RPCS.map((url) => http(url)));
   const wallet = createWalletClient({
     account,
     chain: base,
-    transport: http("https://mainnet.base.org"),
+    transport,
   });
-  const pub = createPublicClient({
-    chain: base,
-    transport: http("https://mainnet.base.org"),
-  });
+  const pub = createPublicClient({ chain: base, transport });
 
   // Self-send with ARCA-tagged calldata. Zero value. Let viem fill gas + nonce.
   const hash = await wallet.sendTransaction({
