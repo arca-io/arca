@@ -8,18 +8,19 @@
     "enabled": true
   },
   "vars": {
-    // Issuer identity published alongside receipts.
     "ISSUER": "arca",
     "KEY_ID": "arca-ed25519-2026-11-09",
-    // Base L2 anchor contract address (deploy in Phase 3; placeholder for now).
     "ANCHOR_CONTRACT": "",
     "ANCHOR_NETWORK": "eip155:8453"
-  }
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "arca-events",
+      "database_id": "3d1f9d7e-378e-4fda-ad37-5f989580e8d8"
+    }
+  ]
   // Secrets added via `wrangler secret put`:
-  //   RECORDER_PRIVATE_KEY — Ed25519 signing key for Arca's recorder signature
-  //   ANCHORER_PRIVATE_KEY — EOA that signs anchor() txs on Base
-  // Bindings added as the project materializes:
-  //   D1 database `arca-events`
-  //   R2 bucket for optional payload refs
-  //   Analytics Engine dataset for ops metrics
+  //   RECORDER_PRIVATE_KEY — Ed25519 (PKCS8 base64) signing key
+  //   ANCHORER_PRIVATE_KEY — (phase 3) EOA that signs anchor() txs on Base
 }
